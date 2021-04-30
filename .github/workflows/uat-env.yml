@@ -50,10 +50,8 @@ jobs:
               }
             }    
   check-health:
-    needs: build
+    needs: deploy
     runs-on: ubuntu-20.04
     steps:
-    - name: curl
-      uses: wei/curl@master
-      with:
-        args: https://bookinfo.uat.opsta.net/student32/ratings/health
+    - name: Acceptance Test
+      run : curl http://bookinfo.uat.opsta.net/student32/ratings/health | grep "Ratings is working"
