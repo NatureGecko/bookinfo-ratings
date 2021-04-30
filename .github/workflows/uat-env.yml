@@ -50,7 +50,7 @@ jobs:
               }
             }    
   check-health:
-    needs: deploy
+    needs: deploy-uat
     runs-on: ubuntu-20.04
     steps:
     - name: Acceptance Test
