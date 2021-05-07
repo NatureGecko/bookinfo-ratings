@@ -1,8 +1,8 @@
-name: dev-env
+name: prd-env
 on:
   push:
     branches:
-      - dev
+      - prd
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -19,8 +19,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/naturegecko/bookinfo-ratings:dev
-  deploy-dev:
+          tags: ghcr.io/naturegecko/bookinfo-ratings:master
+  deploy-prd:
     needs: build
     runs-on: ubuntu-20.04
     steps:
@@ -36,10 +36,10 @@ jobs:
         uses: deliverybot/helm@v1
         with:
           helm: helm3
-          release: bookinfo-dev-ratings
-          namespace: student32-bookinfo-dev
+          release: bookinfo-prd-ratings
+          namespace: student32-bookinfo-prd
           chart: k8s/helm
-          value-files: k8s/helm-values/values-bookinfo-dev-ratings.yaml
+          value-files: k8s/helm-values/values-bookinfo-prd-ratings.yaml
           values: |
             {
               "extraEnv": {
@@ -47,8 +47,8 @@ jobs:
               }
             }    
   check-health:
-    needs: deploy-dev
+    needs: deploy-prd
     runs-on: ubuntu-20.04
     steps:
     - name: Acceptance Test
-      run : curl http://bookinfo.dev.opsta.net/student32/ratings/health | grep "Ratings is working"
+      run : curl http://bookinfo.opsta.net/student32/ratings/health | grep "Ratings is working"
